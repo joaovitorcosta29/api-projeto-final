@@ -15,10 +15,43 @@ app.get('/health', (req, res) => {
 // Rota raiz: apresenta a API
 app.get('/', (req, res) => {
   res.json({
-    nome: 'API do meu projeto',
+    nome: 'Aq vou colocar o nome.',
     versao: '0.1.0',
     rotas: ['GET /health'],
   });
 });
+
+// Dados em memória (no encontro 4 vão para o PostgreSQL)
+const chamados = [
+  { id: 1, titulo: 'Monitor piscando', prioridade: 'media', status: 'aberto' },
+  { id: 2, titulo: 'Sem internet na doca 3', prioridade: 'alta', status: 'em_andamento' },
+  { id: 3, titulo: 'Senha do ERP bloqueada', prioridade: 'alta', status: 'resolvido' },
+];
+
+// Lista
+app.get('/api/chamados', (req, res) => {
+  res.json(chamados);
+});
+
+const clientes = [
+  { id: 1, nome: "João" , email: "joao@gmail.com"},
+  { id: 2, nome: "Maria" , email: "maria@gmail.com"},
+  { id: 3, nome: "Pedro" , email: "pedro@gmail.com"},
+];
+
+// Lista
+app.get('/api/clientes', (req, res) => {
+  res.json(clientes);
+});
+
+app.get('/api/clientes/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const cliente = clientes.find(c => c.id === id);
+  if(cliente) {
+    return res.json(cliente);
+  } else{
+    return res.status(404).json({ error: "cliente não encontrado"});
+  }
+})
 
 export default app;
